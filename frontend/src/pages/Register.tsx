@@ -1,28 +1,29 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Clock, Mail, Lock, User, Building, AlertCircle } from 'lucide-react';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Clock, Mail, Lock, User, Building, AlertCircle } from "lucide-react";
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    department: '',
-    role: 'employee' as 'employee' | 'admin'
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    department: "",
+    role: "employee" as "employee" | "admin", // default role
   });
-  const [error, setError] = useState('');
+
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
@@ -35,25 +36,28 @@ const Register: React.FC = () => {
         role: formData.role,
         department: formData.department,
         joinDate: new Date().toISOString(),
-        password: formData.password
+        password: formData.password,
       });
 
       if (success) {
-        navigate('/dashboard');
+        alert("Account created successfully!");
+        navigate("/dashboard");
       } else {
-        setError('An account with this email already exists');
+        setError("An account with this email already exists");
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -81,8 +85,12 @@ const Register: React.FC = () => {
               </div>
             )}
 
+            {/* Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Full Name
               </label>
               <div className="relative">
@@ -102,8 +110,12 @@ const Register: React.FC = () => {
               </div>
             </div>
 
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email address
               </label>
               <div className="relative">
@@ -123,8 +135,12 @@ const Register: React.FC = () => {
               </div>
             </div>
 
+            {/* Department */}
             <div>
-              <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="department"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Department
               </label>
               <div className="relative">
@@ -150,8 +166,38 @@ const Register: React.FC = () => {
               </div>
             </div>
 
+            {/* Role */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="role"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Role
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <select
+                  id="role"
+                  name="role"
+                  required
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="employee">Employee</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Password
               </label>
               <div className="relative">
@@ -171,8 +217,12 @@ const Register: React.FC = () => {
               </div>
             </div>
 
+            {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Confirm Password
               </label>
               <div className="relative">
@@ -192,19 +242,23 @@ const Register: React.FC = () => {
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isLoading ? 'Creating account...' : 'Create account'}
+              {isLoading ? "Creating account..." : "Create account"}
             </button>
           </div>
 
           <div className="text-center">
             <span className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
                 Sign in
               </Link>
             </span>
